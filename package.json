@@ -1,0 +1,37 @@
+{
+  "name": "semantic-merge-requests",
+  "version": "0.0.0",
+  "description": "GitLab status check that ensures your pull requests follow the Conventional Commits spec",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "lib"
+  ],
+  "scripts": {
+    "start": "node ./index.js",
+    "lint": "standard --fix",
+    "semantic-release": "semantic-release"
+  },
+  "standard": {
+    "env": [
+      "jest"
+    ]
+  },
+  "repository": "https://github.com/florentio/semantic-merge-requests",
+  "keywords": [
+    "Gitlab",
+    "Webhooks",
+    "Node.js"
+  ],
+  "author": "Florentio DE SOUZA (https://github.com/florentio)",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "axios": "^0.26.0",
+    "bl": "^1.2.0",
+    "conventional-commit-types": "^3.0.0",
+    "deepmerge": "^4.2.2",
+    "dotenv": "^8.2.0",
+    "js-yaml": "^4.1.0",
+    "parse-commit-message": "^4.0.0-canary.20"
+  }
+}
