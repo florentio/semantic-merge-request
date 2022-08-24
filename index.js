@@ -22,7 +22,7 @@ const DEFAULT_OPTS = {
   allowMergeCommits: false,
   allowRevertCommits: false,
 };
-
+console.log(process.env)
 const handler = handleMergeRequestEvent({secret: process.env.WEBHOOK_SECRET});
 
 // create http server for the webhook
