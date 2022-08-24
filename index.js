@@ -1,5 +1,5 @@
 const getSemanticConfig = require('./lib/semantic-file-reader');
-const getSemanticConfig = require('./lib/merge-request-commits');
+const getMergeRequestCommits = require('./lib/merge-request-commits');
 const getMergeRequestDetail  = require('./lib/merge-request-detail';
 const createStatus = require('./lib/merge-request-status');
 const isSemanticMessage = require('./lib/is-semantic-message');
