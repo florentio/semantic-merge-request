@@ -23,6 +23,7 @@ const DEFAULT_OPTS = {
   allowRevertCommits: false,
 };
 console.log(process.env)
+console.log(process.env.WEBHOOK_SECRET)
 const handler = handleMergeRequestEvent({secret: process.env.WEBHOOK_SECRET});
 
 // create http server for the webhook
