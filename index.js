@@ -1,9 +1,9 @@
-import {getSemanticConfig} from './lib/semantic-file-reader';
-import {getMergeRequestCommits} from './lib/merge-request-commits';
-import {getMergeRequestDetail} from './lib/merge-request-detail';
-import {createStatus} from './lib/merge-request-status';
-import {isSemanticMessage} from './lib/is-semantic-message';
-import {handleMergeRequestEvent} from './lib/handle-merge-request-event';
+const getSemanticConfig = require('./lib/semantic-file-reader');
+const getSemanticConfig = require('./lib/merge-request-commits');
+const getMergeRequestDetail  = require('./lib/merge-request-detail';
+const createStatus = require('./lib/merge-request-status');
+const isSemanticMessage = require('./lib/is-semantic-message');
+const handleMergeRequestEvent = require('./lib/handle-merge-request-event');
 
 const http = require('http');
 const dotenv = require('dotenv');

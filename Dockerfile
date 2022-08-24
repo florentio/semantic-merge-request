@@ -1,4 +1,4 @@
-FROM node:16-alpine
+FROM node:10-alpine
 
 ENV WEBHOOK_SERVER_PORT=8080
 # Create app directory
