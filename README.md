@@ -49,12 +49,12 @@ enabled: false
 ```
 
 ```yml
-# Disable validation for merge requests mark as draft
+# Validation for merge requests mark as draft
 draftMr: false
 ```
 
 ```yml
-# Disable validation for merge requests mark as work in progress
+# Validation for merge requests mark as work in progress
 workInProgressMr: false
 ```
 
