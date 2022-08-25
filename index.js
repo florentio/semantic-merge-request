@@ -14,7 +14,7 @@ const DEFAULT_OPTS = {
   enabled: true,
   validateDraftMr: false,
   validateWorkInProgressMr: false,
-  titleOnly: false,
+  titleOnly: true,
   addMergeRequestId: true,
   commitsOnly: false,
   titleAndCommits: false,
