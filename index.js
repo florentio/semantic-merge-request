@@ -11,10 +11,10 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const DEFAULT_OPTS = {
-  enabled: true,
+  enabled: false,
   validateDraftMr: false,
   validateWorkInProgressMr: false,
-  titleOnly: true,
+  titleOnly: false,
   addMergeRequestId: true,
   commitsOnly: false,
   titleAndCommits: false,
