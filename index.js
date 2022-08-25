@@ -85,7 +85,7 @@ async function handleMergeRequest(event) {
   });
 
   const mr = await getMergeRequestDetail(projectApiUrl, process.env.WEBHOOK_SECRET, mrId);
-
+  console.log(mr);
   const ignoreCheck = (mr != null && mr.draft && !validateDraftMr) || (mr != null && mr.work_in_progress && !validateWorkInProgressMr);
 
   let isSemantic;
