@@ -65,8 +65,9 @@ async function handleMergeRequest(event) {
   const isVanillaConfig = Object.keys(userConfig).length === 0;
   const {
     enabled,
-    draftMr,
-    workInProgressMr,
+    validateDraftMr,
+    validateWorkInProgressMr,
+    addMergeRequestId,
     titleOnly,
     commitsOnly,
     titleAndCommits,
@@ -79,7 +80,7 @@ async function handleMergeRequest(event) {
 
   const mr = await getMergeRequestDetail(projectApiUrl, process.env.WEBHOOK_SECRET, mrId);
 
-  const ignoreCheck = ( mr != null && mr.draft && !draftMr) || ( mr != null && mr.work_in_progress && !workInProgressMr )
+  const ignoreCheck = ( mr != null && mr.draft && !validateDraftMr) || ( mr != null && mr.work_in_progress && !validateWorkInProgressMr )
   console.log("mr", mr)
   let isSemantic;
   let hasSemanticTitle = false;
