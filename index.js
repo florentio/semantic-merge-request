@@ -89,6 +89,10 @@ async function handleMergeRequest(event) {
   const nonMergeCommits = commits.filter((commit) => commit.startsWith('Merge'));
 
   const mr = await getMergeRequestDetail(projectApiUrl, process.env.WEBHOOK_SECRET, mrId);
+  console.log("hasSemanticTitle", hasSemanticTitle)
+  console.log("commits", commits)
+  console.log("hasSemanticCommits", hasSemanticCommits)
+  console.log("nonMergeCommits", nonMergeCommits)
 
   const ignoreCheck =  ( mr != null && mr.draft && !draftMr) || ( mr != null && mr.work_in_progress && !workInProgressMr )
 
