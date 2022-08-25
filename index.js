@@ -1,6 +1,6 @@
 const getSemanticConfig = require('./lib/semantic-file-reader');
 const getMergeRequestCommits = require('./lib/merge-request-commits');
-const getMergeRequestDetail  = require('./lib/merge-request-detail');
+const getMergeRequestDetail = require('./lib/merge-request-detail');
 const updateMRTitle = require("./lib/merge-request-title");
 const createStatus = require('./lib/merge-request-status');
 const isSemanticMessage = require('./lib/is-semantic-message');
@@ -26,7 +26,7 @@ const DEFAULT_OPTS = {
 };
 
 
-const handler = handleMergeRequestEvent({secret: process.env.WEBHOOK_SECRET});
+const handler = handleMergeRequestEvent({ secret: process.env.WEBHOOK_SECRET });
 
 // create http server for the webhook
 http
@@ -42,7 +42,7 @@ http
 
 async function commitsAreSemantic(commits, scopes, types, allCommits = false, allowMergeCommits, allowRevertCommits) {
   return commits[allCommits ? 'every' : 'some'](
-      (commit) => isSemanticMessage(commit, scopes, types, allowMergeCommits, allowRevertCommits)
+    (commit) => isSemanticMessage(commit, scopes, types, allowMergeCommits, allowRevertCommits)
   );
 }
 
@@ -60,7 +60,7 @@ async function handleMergeRequest(event) {
   const projectId = event.payload.project.id;
   const source_branch = event.payload.object_attributes.source_branch;
   const mrId = event.payload.object_attributes.iid;
-  const projectApiUrl = process.env.GITLAB_API_BASE_URL+ '/projects/' + projectId
+  const projectApiUrl = process.env.GITLAB_API_BASE_URL + '/projects/' + projectId
   const userConfig = await getSemanticConfig(projectApiUrl, process.env.WEBHOOK_SECRET, source_branch, {});
   const isVanillaConfig = Object.keys(userConfig).length === 0;
   const {
@@ -80,43 +80,48 @@ async function handleMergeRequest(event) {
 
   const mr = await getMergeRequestDetail(projectApiUrl, process.env.WEBHOOK_SECRET, mrId);
 
-  const ignoreCheck = ( mr != null && mr.draft && !validateDraftMr) || ( mr != null && mr.work_in_progress && !validateWorkInProgressMr )
-  console.log("mr", mr)
+  const ignoreCheck = (mr != null && mr.draft && !validateDraftMr) || (mr != null && mr.work_in_progress && !validateWorkInProgressMr)
+
   let isSemantic;
   let hasSemanticTitle = false;
   let hasSemanticCommits = false;
   let nonMergeCommits = []
+
   if (!enabled || ignoreCheck) {
     isSemantic = true
   }
-  else{
-      hasSemanticTitle = isSemanticMessage(title, scopes, types);
+  else {
+    hasSemanticTitle = isSemanticMessage(title, scopes, types);
+
+    if (titleOnly) {
+      isSemantic = hasSemanticTitle;
+    }
+    else {
       const commits = await getMergeRequestCommits(projectApiUrl, process.env.WEBHOOK_SECRET, mrId);
       hasSemanticCommits = await commitsAreSemantic(commits, scopes, types, (commitsOnly || titleAndCommits) && !anyCommit, allowMergeCommits, allowRevertCommits);
       nonMergeCommits = commits.filter((commit) => commit.startsWith('Merge'));
 
-      console.log("hasSemanticTitle", hasSemanticTitle)
-      console.log("commits", commits)
-      console.log("hasSemanticCommits", hasSemanticCommits)
-      console.log("nonMergeCommits", nonMergeCommits)
-
-
-      if (!enabled || ignoreCheck) {
-        isSemantic = true
-      }
-      else if (titleOnly) {
-        isSemantic = hasSemanticTitle;
-      } else if (commitsOnly) {
+      if (commitsOnly) {
         isSemantic = hasSemanticCommits;
-      } else if (titleAndCommits) {
+      }
+      else if (titleAndCommits) {
         isSemantic = hasSemanticTitle && hasSemanticCommits;
-      } else if (isVanillaConfig && nonMergeCommits.length === 1) {
+      }
+      else if (isVanillaConfig && nonMergeCommits.length === 1) {
         // Watch out for cases where there's only commit and it's not semantic.
         // GitLab won't squash PRs that have only one commit.
         isSemantic = hasSemanticCommits;
-      } else {
+      }
+      else {
         isSemantic = hasSemanticTitle || hasSemanticCommits;
       }
+
+    }
+
+    console.log("hasSemanticTitle", hasSemanticTitle)
+    console.log("commits", commits)
+    console.log("hasSemanticCommits", hasSemanticCommits)
+    console.log("nonMergeCommits", nonMergeCommits)
   }
 
 
@@ -134,25 +139,25 @@ async function handleMergeRequest(event) {
     return 'add a semantic commit or MR title';
   }
 
-   const state = isSemantic ? 'success' : 'failed';
-    const description = getDescription();
-    const result = await createStatus(projectApiUrl, process.env.WEBHOOK_SECRET, mrId,
-      {
-        state: state,
-        target_url: 'https://github.com/florentio/semantic-merge-requests',
-        description: description,
-        context: 'Semantic Merge Request',
-      }
-    );
+  const state = isSemantic ? 'success' : 'failed';
+  const description = getDescription();
+  const result = await createStatus(projectApiUrl, process.env.WEBHOOK_SECRET, mrId,
+    {
+      state: state,
+      target_url: 'https://github.com/florentio/semantic-merge-requests',
+      description: description,
+      context: 'Semantic Merge Request',
+    }
+  );
 
-    if (addMergeRequestId && !title.trim().endsWith("(!" + mrId + ")"))
-      await updateMRTitle(
-        projectApiUrl,
-        process.env.WEBHOOK_SECRET,
-        mrId,
-        { title: title + " (!" + mrId + ")" }
-      );
-    console.log('Semantic Merge Request  %s with message : %s ', state, description);
+  if (addMergeRequestId && !title.trim().endsWith("(!" + mrId + ")"))
+    await updateMRTitle(
+      projectApiUrl,
+      process.env.WEBHOOK_SECRET,
+      mrId,
+      { title: title + " (!" + mrId + ")" }
+    );
+  console.log('Semantic Merge Request  %s with message : %s ', state, description);
 
 
   res.writeHead(200, { 'content-type': 'application/json' });
