@@ -135,7 +135,7 @@ async function handleMergeRequest(event) {
     if (ignoreCheck) return 'skipped; merge request is a draft'
     if (!isSemantic && isVanillaConfig && nonMergeCommits.length === 1) return 'MR has only one non-merge commit and it\'s not semantic; add another commit before squashing';
     if (isSemantic && titleAndCommits) return 'ready to be merged, squashed or rebased';
-    if (!isSemantic && titleAndCommits) return 'add a semantic MR title';
+    if (!isSemantic && titleAndCommits) return 'add a semantic commits and MR title';
     if (hasSemanticTitle && !commitsOnly) return 'ready to be squashed';
     if (hasSemanticCommits && !titleOnly) return 'ready to be merged or rebased';
     if (titleOnly) return 'add a semantic MR title';
