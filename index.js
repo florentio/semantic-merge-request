@@ -147,7 +147,7 @@ async function handleMergeRequest(event) {
 
     if (addMergeRequestId && !title.trim().endsWith("(!" + mrId + ")"))
       await updateMRTitle(
-        pprojectApiUrl,
+        projectApiUrl,
         process.env.WEBHOOK_SECRET,
         projectId,
         mrId,
