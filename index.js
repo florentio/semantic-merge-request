@@ -145,13 +145,13 @@ async function handleMergeRequest(event) {
       }
     );
 
-    if (addMergeRequestId && !title.trim().endsWith("(!" + mr_id + ")"))
+    if (addMergeRequestId && !title.trim().endsWith("(!" + mrId + ")"))
       await updateMRTitle(
         process.env.GITLAB_API_URL,
         process.env.WEBHOOK_SECRET,
         project_id,
-        mr_id,
-        { title: title + " (!" + mr_id + ")" }
+        mrId,
+        { title: title + " (!" + mrId + ")" }
       );
     console.log('Semantic Merge Request  %s with message : %s ', state, description);
 
