@@ -82,12 +82,13 @@ async function handleMergeRequest(event) {
   const ignoreCheck = ( mr != null && mr.draft && !draftMr) || ( mr != null && mr.work_in_progress && !workInProgressMr )
   console.log("mr", mr)
   let isSemantic;
+  let hasSemanticTitle = false;
   let nonMergeCommits = []
   if (!enabled || ignoreCheck) {
     isSemantic = true
   }
   else{
-      const hasSemanticTitle = isSemanticMessage(title, scopes, types);
+      hasSemanticTitle = isSemanticMessage(title, scopes, types);
       const commits = await getMergeRequestCommits(projectApiUrl, process.env.WEBHOOK_SECRET, mrId);
       const hasSemanticCommits = await commitsAreSemantic(commits, scopes, types, (commitsOnly || titleAndCommits) && !anyCommit, allowMergeCommits, allowRevertCommits);
       nonMergeCommits = commits.filter((commit) => commit.startsWith('Merge'));
