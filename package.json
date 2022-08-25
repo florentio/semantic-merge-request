@@ -29,9 +29,9 @@
     "axios": "^0.26.0",
     "bl": "^1.2.0",
     "conventional-commit-types": "^3.0.0",
+    "dedent": "^0.7.0",
     "deepmerge": "^4.2.2",
     "dotenv": "^8.2.0",
     "js-yaml": "^4.1.0",
-    "parse-commit-message": "^4.0.0-canary.20200124.9"
   }
 }
