@@ -75,6 +75,14 @@ async function handleMergeRequest(event) {
     allowRevertCommits,
   } = Object.assign({}, DEFAULT_OPTS, userConfig);
 
+/*  const mr = await getMergeRequestDetail(projectApiUrl, process.env.WEBHOOK_SECRET, mrId);
+
+  const ignoreCheck = (!draftMr || (draftMr &&  !mr.draft) ) && ( !workInProgressMr || (workInProgressMr &&  !mr.work_in_progress))
+  let isSemantic;
+   if (!enabled || ignoreCheck) {
+    isSemantic = true
+  }*/
+
   const hasSemanticTitle = isSemanticMessage(title, scopes, types);
   const commits = await getMergeRequestCommits(projectApiUrl, process.env.WEBHOOK_SECRET, mrId);
   const hasSemanticCommits = await commitsAreSemantic(commits, scopes, types, (commitsOnly || titleAndCommits) && !anyCommit, allowMergeCommits, allowRevertCommits);
