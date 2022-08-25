@@ -93,6 +93,7 @@ async function handleMergeRequest(event) {
   console.log("commits", commits)
   console.log("hasSemanticCommits", hasSemanticCommits)
   console.log("nonMergeCommits", nonMergeCommits)
+  console.log("mr", mr)
 
   const ignoreCheck =  ( mr != null && mr.draft && !draftMr) || ( mr != null && mr.work_in_progress && !workInProgressMr )
 
