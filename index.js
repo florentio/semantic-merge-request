@@ -147,9 +147,9 @@ async function handleMergeRequest(event) {
 
     if (addMergeRequestId && !title.trim().endsWith("(!" + mrId + ")"))
       await updateMRTitle(
-        process.env.GITLAB_API_URL,
+        pprojectApiUrl,
         process.env.WEBHOOK_SECRET,
-        project_id,
+        projectId,
         mrId,
         { title: title + " (!" + mrId + ")" }
       );
