@@ -83,6 +83,7 @@ async function handleMergeRequest(event) {
   console.log("mr", mr)
   let isSemantic;
   let hasSemanticTitle = false;
+  let hasSemanticCommits = false;
   let nonMergeCommits = []
   if (!enabled || ignoreCheck) {
     isSemantic = true
@@ -90,7 +91,7 @@ async function handleMergeRequest(event) {
   else{
       hasSemanticTitle = isSemanticMessage(title, scopes, types);
       const commits = await getMergeRequestCommits(projectApiUrl, process.env.WEBHOOK_SECRET, mrId);
-      const hasSemanticCommits = await commitsAreSemantic(commits, scopes, types, (commitsOnly || titleAndCommits) && !anyCommit, allowMergeCommits, allowRevertCommits);
+      hasSemanticCommits = await commitsAreSemantic(commits, scopes, types, (commitsOnly || titleAndCommits) && !anyCommit, allowMergeCommits, allowRevertCommits);
       nonMergeCommits = commits.filter((commit) => commit.startsWith('Merge'));
 
       console.log("hasSemanticTitle", hasSemanticTitle)
@@ -123,7 +124,7 @@ async function handleMergeRequest(event) {
     if (ignoreCheck) return 'skipped; merge request is a draft'
     if (!isSemantic && isVanillaConfig && nonMergeCommits.length === 1) return 'MR has only one non-merge commit and it\'s not semantic; add another commit before squashing';
     if (isSemantic && titleAndCommits) return 'ready to be merged, squashed or rebased';
-    if (!isSemantic && titleAndCommits) return 'add a semantic commit AND MR title';
+    if (!isSemantic && titleAndCommits) return 'add a semantic MR title';
     if (hasSemanticTitle && !commitsOnly) return 'ready to be squashed';
     if (hasSemanticCommits && !titleOnly) return 'ready to be merged or rebased';
     if (titleOnly) return 'add a semantic MR title';
