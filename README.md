@@ -50,17 +50,22 @@ enabled: false
 
 ```yml
 # Validation for merge requests mark as draft
-draftMr: false
+validateDraftMr: false
 ```
 
 ```yml
 # Validation for merge requests mark as work in progress
-workInProgressMr: false
+validateWorkInProgressMr: false
 ```
 
 ```yml
 # Always validate the PR title, and ignore the commits
 titleOnly: true
+```
+
+```yml
+# Always check the MR Id in MR title add it if not
+addMergeRequestId: true
 ```
 
 ```yml
