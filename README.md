@@ -54,11 +54,6 @@ validateDraftMr: false
 ```
 
 ```yml
-# Validation for merge requests mark as work in progress
-validateWorkInProgressMr: false
-```
-
-```yml
 # Always validate the PR title, and ignore the commits
 titleOnly: true
 ```

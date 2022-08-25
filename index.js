@@ -66,7 +66,6 @@ async function handleMergeRequest(event) {
   const {
     enabled,
     validateDraftMr,
-    validateWorkInProgressMr,
     addMergeRequestId,
     titleOnly,
     commitsOnly,
@@ -79,14 +78,14 @@ async function handleMergeRequest(event) {
   } = Object.assign({}, DEFAULT_OPTS, userConfig);
 
   console.log("config", {
-    "enabled": enabled, "validateDraftMr": validateDraftMr, "validateWorkInProgressMr": validateWorkInProgressMr,
+    "enabled": enabled, "validateDraftMr": validateDraftMr,
     "addMergeRequestId": addMergeRequestId, "titleOnly": titleOnly, "commitsOnly": commitsOnly, "titleAndCommits": titleAndCommits,
     "anyCommit": anyCommit, "scopes": scopes, "types": types, "allowMergeCommits": allowMergeCommits, "allowRevertCommits": allowRevertCommits,
   });
 
   const mr = await getMergeRequestDetail(projectApiUrl, process.env.WEBHOOK_SECRET, mrId);
   console.log(mr);
-  const ignoreCheck = (mr != null && mr.draft && !validateDraftMr) || (mr != null && mr.work_in_progress && !validateWorkInProgressMr);
+  const ignoreCheck = (mr != null && mr.draft && !validateDraftMr);
 
   let isSemantic;
   let hasSemanticTitle = false;
