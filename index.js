@@ -49,7 +49,7 @@ async function commitsAreSemantic(commits, scopes, types, allCommits = false, al
 // process merge request event
 async function handleMergeRequest(event) {
   console.log(
-    'Received a merge_request event for %s with title %s ',
+    'Received a merge_request event for : %s with title : %s ',
     event.payload.repository.name,
     event.payload.object_attributes.title
   );
@@ -149,7 +149,6 @@ async function handleMergeRequest(event) {
       await updateMRTitle(
         projectApiUrl,
         process.env.WEBHOOK_SECRET,
-        projectId,
         mrId,
         { title: title + " (!" + mrId + ")" }
       );
