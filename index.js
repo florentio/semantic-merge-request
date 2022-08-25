@@ -78,17 +78,24 @@ async function handleMergeRequest(event) {
     allowRevertCommits,
   } = Object.assign({}, DEFAULT_OPTS, userConfig);
 
+  console.log("config", {
+    "enabled": enabled, "validateDraftMr": validateDraftMr, "validateWorkInProgressMr": validateWorkInProgressMr,
+    "addMergeRequestId": addMergeRequestId, "titleOnly": titleOnly, "commitsOnly": commitsOnly, "titleAndCommits": titleAndCommits,
+    "anyCommit": anyCommit, "scopes": scopes, "types": types, "allowMergeCommits": allowMergeCommits, "allowRevertCommits": allowRevertCommits,
+  });
+
   const mr = await getMergeRequestDetail(projectApiUrl, process.env.WEBHOOK_SECRET, mrId);
 
-  const ignoreCheck = (mr != null && mr.draft && !validateDraftMr) || (mr != null && mr.work_in_progress && !validateWorkInProgressMr)
+  const ignoreCheck = (mr != null && mr.draft && !validateDraftMr) || (mr != null && mr.work_in_progress && !validateWorkInProgressMr);
 
   let isSemantic;
   let hasSemanticTitle = false;
   let hasSemanticCommits = false;
   let nonMergeCommits = []
+  let commits = []
 
   if (!enabled || ignoreCheck) {
-    isSemantic = true
+    isSemantic = true;
   }
   else {
     hasSemanticTitle = isSemanticMessage(title, scopes, types);
@@ -97,7 +104,7 @@ async function handleMergeRequest(event) {
       isSemantic = hasSemanticTitle;
     }
     else {
-      const commits = await getMergeRequestCommits(projectApiUrl, process.env.WEBHOOK_SECRET, mrId);
+      commits = await getMergeRequestCommits(projectApiUrl, process.env.WEBHOOK_SECRET, mrId);
       hasSemanticCommits = await commitsAreSemantic(commits, scopes, types, (commitsOnly || titleAndCommits) && !anyCommit, allowMergeCommits, allowRevertCommits);
       nonMergeCommits = commits.filter((commit) => commit.startsWith('Merge'));
 
@@ -115,15 +122,13 @@ async function handleMergeRequest(event) {
       else {
         isSemantic = hasSemanticTitle || hasSemanticCommits;
       }
-
     }
-
-    console.log("hasSemanticTitle", hasSemanticTitle)
-    console.log("commits", commits)
-    console.log("hasSemanticCommits", hasSemanticCommits)
-    console.log("nonMergeCommits", nonMergeCommits)
   }
 
+  console.log("hasSemanticTitle", hasSemanticTitle);
+  console.log("commits", commits);
+  console.log("hasSemanticCommits", hasSemanticCommits);
+  console.log("nonMergeCommits", nonMergeCommits);
 
   function getDescription() {
     if (!enabled) return 'skipped; check disabled in semantic.yml config'
