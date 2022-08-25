@@ -133,15 +133,15 @@ async function handleMergeRequest(event) {
   function getDescription() {
     if (!enabled) return 'skipped; check disabled in semantic.yml config'
     if (ignoreCheck) return 'skipped; merge request is a draft'
-    if (!isSemantic && isVanillaConfig && nonMergeCommits.length === 1) return 'MR has only one non-merge commit and it\'s not semantic; add another commit before squashing';
+    if (!isSemantic && isVanillaConfig && nonMergeCommits.length === 1) return 'Merge request has only one non-merge commit and it\'s not semantic; add another commit before squashing';
     if (isSemantic && titleAndCommits) return 'ready to be merged, squashed or rebased';
-    if (!isSemantic && titleAndCommits) return 'add a semantic commits and MR title';
+    if (!isSemantic && titleAndCommits) return 'add a semantic commits and merge request title';
     if (hasSemanticTitle && !commitsOnly) return 'ready to be squashed';
     if (hasSemanticCommits && !titleOnly) return 'ready to be merged or rebased';
-    if (titleOnly) return 'add a semantic MR title';
+    if (titleOnly) return 'add a semantic merge request title';
     if (commitsOnly && anyCommit) return 'add a semantic commit';
     if (commitsOnly) return 'make sure every commit is semantic';
-    return 'add a semantic commit or MR title';
+    return 'add a semantic commit or merge request title';
   }
 
   const state = isSemantic ? 'success' : 'failed';
