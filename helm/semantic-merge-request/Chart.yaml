@@ -1,0 +1,12 @@
+apiVersion: v2
+name: semantic-merge-request
+description: A Helm chart to install semantic-merge-request
+engine: gotpl
+home: https://github.com/florentio/semantic-merge-request
+icon: https://github.com/kubernetes/kubernetes/raw/master/logo/logo.png
+maintainers:
+  - email: florentio@icloud.com
+    name: Florentio DE SOUZA
+type: application
+version: 0.1.0
+appVersion: "1.16.0"
