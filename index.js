@@ -91,26 +91,28 @@ async function handleMergeRequest(event) {
     allowRevertCommits,
   } = Object.assign({}, DEFAULT_OPTS, userConfig);
 
-  console.log("config", {
-    enabled: enabled,
-    validateDraftMr: validateDraftMr,
-    addMergeRequestId: addMergeRequestId,
-    titleOnly: titleOnly,
-    commitsOnly: commitsOnly,
-    titleAndCommits: titleAndCommits,
-    anyCommit: anyCommit,
-    scopes: scopes,
-    types: types,
-    allowMergeCommits: allowMergeCommits,
-    allowRevertCommits: allowRevertCommits,
-  });
+  if (process.env.NODE_ENV === "DEBUG")
+      console.log("config", {
+        enabled: enabled,
+        validateDraftMr: validateDraftMr,
+        addMergeRequestId: addMergeRequestId,
+        titleOnly: titleOnly,
+        commitsOnly: commitsOnly,
+        titleAndCommits: titleAndCommits,
+        anyCommit: anyCommit,
+        scopes: scopes,
+        types: types,
+        allowMergeCommits: allowMergeCommits,
+        allowRevertCommits: allowRevertCommits,
+      });
+  }
 
   const mr = await getMergeRequestDetail(
     projectApiUrl,
     process.env.WEBHOOK_SECRET,
     mrId,
   );
-  console.log(mr);
+
   const ignoreCheck = mr != null && mr.draft && !validateDraftMr;
 
   let isSemantic;
@@ -155,11 +157,6 @@ async function handleMergeRequest(event) {
       }
     }
   }
-
-  console.log("hasSemanticTitle", hasSemanticTitle);
-  console.log("commits", commits);
-  console.log("hasSemanticCommits", hasSemanticCommits);
-  console.log("nonMergeCommits", nonMergeCommits);
 
   function getDescription() {
     if (!enabled) return "skipped; check disabled in semantic.yml config";
